@@ -80,6 +80,8 @@ fi
 # We install some non-standard Ubuntu packages maintained by other
 # third-party providers. First ensure add-apt-repository is installed.
 
+OS_RELEASE=$( lsb_release --release --short )
+
 if [ ! -f /usr/bin/add-apt-repository ]; then
 	echo "Installing add-apt-repository..."
 	hide_output apt-get update
@@ -91,7 +93,9 @@ fi
 hide_output add-apt-repository -y universe
 
 # Install the certbot PPA.
-hide_output add-apt-repository -y ppa:certbot/certbot
+if [ ! "${OS_RELEASE}" == "20.04" ]; then
+	hide_output add-apt-repository -y ppa:certbot/certbot
+fi
 
 # Install the duplicity PPA.
 hide_output add-apt-repository -y ppa:duplicity-team/duplicity-release-git
